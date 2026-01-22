@@ -68,12 +68,75 @@ public class NUSGPT {
                             + task + "\n"
                             + horizontal_line);
                 }
+            // check if the task is a todo task
+            } else if (command.startsWith("todo")) {
+                // get description of todo from input
+                String description = command.substring(5);
+                // check if there is space in the task list
+                if (taskNumber < maxTasks) {
+                    // add the todo task into the task list
+                    tasks[taskNumber] = new ToDo(description);
+                    System.out.println(horizontal_line
+                            + "Got it. I've added this task:\n"
+                            + tasks[taskNumber] + "\n"
+                            + "Now you have " + (taskNumber + 1) + " tasks in the list.\n"
+                            + horizontal_line);
+                    taskNumber++;
+                }
+            // check if the task is a deadline task
+            } else if (command.startsWith("deadline")) {
+                // get information of the deadline task from the input
+                String taskInfo = command.substring(9);
+                // the date of the deadline is after the " /by " text
+                int dateIndex = taskInfo.indexOf(" /by ");
+                // get the description of the deadline task from the input
+                String description = taskInfo.substring(0, dateIndex);
+                // get the date of the deadline task from the input
+                String date = taskInfo.substring(dateIndex + 5);
+                // check if there is space in the task list
+                if (taskNumber < maxTasks) {
+                    // add the deadline task into the task list
+                    tasks[taskNumber] = new Deadline(description, date);
+                    System.out.println(horizontal_line
+                            + "Got it. I've added this task:\n"
+                            + tasks[taskNumber] + "\n"
+                            + "Now you have " + (taskNumber + 1) + " tasks in the list.\n"
+                            + horizontal_line);
+                    taskNumber++;
+                }
+            // check if the task is an event task
+            } else if (command.startsWith("event")) {
+                // get information of the event task from the input
+                String taskInfo = command.substring(6);
+                // the start of the event is after the " /from " text
+                int startIndex = taskInfo.indexOf(" /from ");
+                // the end of the event is after the " /to " text
+                int endIndex = taskInfo.indexOf(" /to ");
+                // get the description of the event task from the input
+                String description = taskInfo.substring(0, startIndex);
+                // get the start of the deadline task from the input
+                String start = taskInfo.substring(startIndex + 7, endIndex);
+                // get the end of the deadline task from the input
+                String end = taskInfo.substring(endIndex + 5);
+                // check if there is space in the task list
+                if (taskNumber < maxTasks) {
+                    tasks[taskNumber] = new Event(description, start, end);
+                    System.out.println(horizontal_line
+                            + "Got it. I've added this task:\n"
+                            + tasks[taskNumber] + "\n"
+                            + "Now you have " + (taskNumber + 1) + " tasks in the list.\n"
+                            + horizontal_line);
+                    taskNumber++;
+                }
             } else {
                 // store the text in the list if it has space
                 if (taskNumber < maxTasks) {
+                    // add the event task into the task list
                     tasks[taskNumber] = new Task(command);
                     System.out.println(horizontal_line
-                            + "added: " + tasks[taskNumber] + "\n"
+                            + "Got it. I've added this task:\n"
+                            + tasks[taskNumber] + "\n"
+                            + "Now you have " + (taskNumber + 1) + " tasks in the list.\n"
                             + horizontal_line);
                     taskNumber++;
                 }
