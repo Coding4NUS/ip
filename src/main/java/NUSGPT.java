@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class NUSGPT {
@@ -5,9 +6,8 @@ public class NUSGPT {
         Scanner scanner = new Scanner(System.in);
 
         // store up to 100 tasks
-        int taskNumber = 0;
         int maxTasks = 100;
-        Task[] tasks = new Task[maxTasks];
+        ArrayList<Task> tasks = new ArrayList<>();
 
         // horizontal line template
         String horizontal_line = "____________________________________________________________\n";
@@ -29,20 +29,20 @@ public class NUSGPT {
                     System.out.println(horizontal_line);
                     System.out.println("Here are the tasks in your list:");
                     // for each item in the list print it in order
-                    for (int i = 0; i < taskNumber; i++) {
-                        System.out.println((i + 1) + ". " + tasks[i]);
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + ". " + tasks.get(i));
                     }
                     System.out.println(horizontal_line);
                 // check if the command says to mark an item on the list
                 } else if (command.startsWith("mark")) {
                     // get the index of the item in the list to be marked
-                    int index = Integer.parseInt(command.substring(5));
+                    int index = Integer.parseInt(command.substring(5).trim());
                     // check if the index is a valid number
-                    if (index < 1 || index > taskNumber) {
+                    if (index < 1 || index > tasks.size()) {
                         throw new NUSGPTException(index + " is not a valid index\n");
                     } else {
                         // mark the item in the list index
-                        Task task = tasks[index - 1];
+                        Task task = tasks.get(index - 1);
                         task.markDone();
                         System.out.println(horizontal_line
                                 + "Nice! I've marked this task as done:\n"
@@ -52,17 +52,33 @@ public class NUSGPT {
                 // check if the command says to unmark an item on the list
                 } else if (command.startsWith("unmark")) {
                     // get the index of the item in the list to be unmarked
-                    int index = Integer.parseInt(command.substring(7));
+                    int index = Integer.parseInt(command.substring(7).trim());
                     // check if the index is a valid number
-                    if (index < 1 || index > taskNumber) {
+                    if (index < 1 || index > tasks.size()) {
                         throw new NUSGPTException(index + " is not a valid index\n");
                     } else {
                         // unmark the item in the list index
-                        Task task = tasks[index - 1];
+                        Task task = tasks.get(index - 1);
                         task.markNotDone();
                         System.out.println(horizontal_line
                                 + "OK, I've marked this task as not done yet:\n"
                                 + task + "\n"
+                                + horizontal_line);
+                    }
+                // check if the command is to delete a task from the task list
+                } else if (command.startsWith("delete")) {
+                    // get the index of the item in the list to be deleted
+                    int index = Integer.parseInt(command.substring(7).trim());
+                    // check if the index is a valid number
+                    if (index < 1 || index > tasks.size()) {
+                        throw new NUSGPTException(index + " is not a valid index\n");
+                    } else {
+                        // delete the item in the list index
+                        Task task = tasks.remove(index - 1);
+                        System.out.println(horizontal_line
+                                + "Noted. I've removed this task:\n"
+                                + task + "\n"
+                                + "Now you have " + tasks.size() + " tasks in the list.\n"
                                 + horizontal_line);
                     }
                 // check if the task is a todo task
@@ -74,15 +90,15 @@ public class NUSGPT {
                         throw new NUSGPTException("please provide a description for the todo task.\n");
                     }
                     // check if there is space in the task list
-                    if (taskNumber < maxTasks) {
+                    if (tasks.size() < maxTasks) {
                         // add the todo task into the task list
-                        tasks[taskNumber] = new ToDo(description);
+                        Task task = new ToDo(description);
+                        tasks.add(task);
                         System.out.println(horizontal_line
                                 + "Got it. I've added this task:\n"
-                                + tasks[taskNumber] + "\n"
-                                + "Now you have " + (taskNumber + 1) + " tasks in the list.\n"
+                                + task + "\n"
+                                + "Now you have " + tasks.size() + " tasks in the list.\n"
                                 + horizontal_line);
-                        taskNumber++;
                     } else {
                         // if there is no space in the task list throw an error
                         throw new NUSGPTException("no space for new tasks in task list.\n");
@@ -107,15 +123,15 @@ public class NUSGPT {
                         throw new NUSGPTException("please provide a date for the deadline task.\n");
                     }
                     // check if there is space in the task list
-                    if (taskNumber < maxTasks) {
+                    if (tasks.size() < maxTasks) {
                         // add the deadline task into the task list
-                        tasks[taskNumber] = new Deadline(description, date);
+                        Task task = new Deadline(description, date);
+                        tasks.add(task);
                         System.out.println(horizontal_line
                                 + "Got it. I've added this task:\n"
-                                + tasks[taskNumber] + "\n"
-                                + "Now you have " + (taskNumber + 1) + " tasks in the list.\n"
+                                + task + "\n"
+                                + "Now you have " + tasks.size() + " tasks in the list.\n"
                                 + horizontal_line);
-                        taskNumber++;
                     } else {
                         // if there is no space in the task list throw an error
                         throw new NUSGPTException("no space for new tasks in task list.\n");
@@ -159,14 +175,15 @@ public class NUSGPT {
                         throw new NUSGPTException("please provide a time for the end of the event task.\n");
                     }
                     // check if there is space in the task list
-                    if (taskNumber < maxTasks) {
-                        tasks[taskNumber] = new Event(description, start, end);
+                    if (tasks.size() < maxTasks) {
+                        // add the event task into the task list
+                        Task task = new Event(description, start, end);
+                        tasks.add(task);
                         System.out.println(horizontal_line
                                 + "Got it. I've added this task:\n"
-                                + tasks[taskNumber] + "\n"
-                                + "Now you have " + (taskNumber + 1) + " tasks in the list.\n"
+                                + task + "\n"
+                                + "Now you have " + tasks.size() + " tasks in the list.\n"
                                 + horizontal_line);
-                        taskNumber++;
                     } else {
                         // if there is no space in the task list throw an error
                         throw new NUSGPTException("no space for new tasks in task list.\n");
