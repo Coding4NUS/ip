@@ -11,20 +11,12 @@ public class Task {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void markDone() {
         this.isDone = true;
     }
 
     public void markNotDone() {
         this.isDone = false;
-    }
-
-    public boolean isDone() {
-        return isDone;
     }
 
     @Override
