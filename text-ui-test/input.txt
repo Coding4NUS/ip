@@ -16,4 +16,10 @@ mark 3
 list
 unmark 3
 list
+mark 4
+unmark 4
+todo
+deadline
+event
+blah
 bye
