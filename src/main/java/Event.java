@@ -8,8 +8,22 @@ public class Event extends Task {
         this.end = end;
     }
 
+    public String getStart() {
+        return start;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";
+    }
+
+    @Override
+    public String toFileString() {
+        return "E | " + (isDone() ? "1" : "0") + " | " + getDescription()
+                + " | " + getStart() + " | " + getEnd();
     }
 }

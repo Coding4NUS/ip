@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,7 +8,18 @@ public class NUSGPT {
 
         // store up to 100 tasks
         int maxTasks = 100;
-        ArrayList<Task> tasks = new ArrayList<>();
+        // stores and loads tasks from the disk
+        Storage storage = new Storage();
+        // list of tasks
+        ArrayList<Task> tasks;
+
+        // try to load from existing data file
+        try {
+            tasks = storage.load();
+        } catch (IOException e) {
+            // if existing data file does not existing make a new task list
+            tasks = new ArrayList<>();
+        }
 
         // horizontal line template
         String horizontal_line = "____________________________________________________________\n";
@@ -44,6 +56,9 @@ public class NUSGPT {
                         // mark the item in the list index
                         Task task = tasks.get(index - 1);
                         task.markDone();
+                        // save the task in data storage
+                        storage.save(tasks);
+                        // print message
                         System.out.println(horizontal_line
                                 + "Nice! I've marked this task as done:\n"
                                 + task + "\n"
@@ -60,6 +75,9 @@ public class NUSGPT {
                         // unmark the item in the list index
                         Task task = tasks.get(index - 1);
                         task.markNotDone();
+                        // save the task in data storage
+                        storage.save(tasks);
+                        // print message
                         System.out.println(horizontal_line
                                 + "OK, I've marked this task as not done yet:\n"
                                 + task + "\n"
@@ -75,6 +93,9 @@ public class NUSGPT {
                     } else {
                         // delete the item in the list index
                         Task task = tasks.remove(index - 1);
+                        // save the task in data storage
+                        storage.save(tasks);
+                        // print message
                         System.out.println(horizontal_line
                                 + "Noted. I've removed this task:\n"
                                 + task + "\n"
@@ -94,6 +115,9 @@ public class NUSGPT {
                         // add the todo task into the task list
                         Task task = new ToDo(description);
                         tasks.add(task);
+                        // save the task in data storage
+                        storage.save(tasks);
+                        // print message
                         System.out.println(horizontal_line
                                 + "Got it. I've added this task:\n"
                                 + task + "\n"
@@ -127,6 +151,9 @@ public class NUSGPT {
                         // add the deadline task into the task list
                         Task task = new Deadline(description, date);
                         tasks.add(task);
+                        // save the task in data storage
+                        storage.save(tasks);
+                        // print message
                         System.out.println(horizontal_line
                                 + "Got it. I've added this task:\n"
                                 + task + "\n"
@@ -179,6 +206,9 @@ public class NUSGPT {
                         // add the event task into the task list
                         Task task = new Event(description, start, end);
                         tasks.add(task);
+                        // save the task in data storage
+                        storage.save(tasks);
+                        // print message
                         System.out.println(horizontal_line
                                 + "Got it. I've added this task:\n"
                                 + task + "\n"
@@ -192,7 +222,13 @@ public class NUSGPT {
                     throw new NUSGPTException("unidentified instruction. the following tasks are valid: todo, event, deadline\n");
                 }
             } catch (NUSGPTException exception) {
+                // print exception message
                 System.out.println(horizontal_line + exception.getMessage() + horizontal_line);
+            } catch (IOException exception) {
+                // if there was an error with data storage print error message
+                System.out.println(horizontal_line
+                        + "error: could not save tasks to hard disk.\n"
+                        + horizontal_line);
             }
             // let the user input a new command
             command = scanner.nextLine();
