@@ -28,7 +28,14 @@ public class Storage {
                     continue;
                 }
                 // convert the text to a task and add it to the task list
-                tasks.add(parseLine(line));
+                try {
+                    Task t = parseLine(line);
+                    if (t != null) {
+                        tasks.add(t);
+                    }
+                } catch (RuntimeException ex) {
+                    // ignore runtime error
+                }
             }
         }
         // return the list of tasks loaded from the file
@@ -78,11 +85,11 @@ public class Storage {
         // splits the line by the separator
         String[] parts = line.split("\\Q" + SEPARATOR + "\\E", -1);
         // task type
-        String type = parts[0];
+        String type = parts[0].trim();
         // if task is done or not
-        int done = Integer.parseInt(parts[1]);
+        int done = Integer.parseInt(parts[1].trim());
         // task description
-        String desc = parts[2];
+        String description = parts[2];
         // new task which stores data
         Task task;
 
@@ -92,18 +99,15 @@ public class Storage {
                 if (parts.length != 3) {
                     return null;
                 }
-                task = new ToDo(desc);
+                task = new ToDo(description);
                 break;
             // create deadline task
             case "D":
                 if (parts.length != 4) {
                     return null;
                 }
-                String by = parts[3];
-                if (by.isEmpty()) {
-                    return null;
-                }
-                task = new Deadline(desc, by);
+                String by = parts[3].trim();
+                task = new Deadline(description, by);
                 break;
             // create event task
             case "E":
@@ -116,7 +120,7 @@ public class Storage {
                 if (from.isEmpty() || to.isEmpty()) {
                     return null;
                 }
-                task = new Event(desc, from, to);
+                task = new Event(description, from, to);
                 break;
             // if none of the task types are recognised throw error
             default:

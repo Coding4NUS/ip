@@ -45,7 +45,7 @@ public class NUSGPT {
                         System.out.println((i + 1) + ". " + tasks.get(i));
                     }
                     System.out.println(horizontal_line);
-                // check if the command says to mark an item on the list
+                    // check if the command says to mark an item on the list
                 } else if (command.startsWith("mark")) {
                     // get the index of the item in the list to be marked
                     int index = Integer.parseInt(command.substring(5).trim());
@@ -64,7 +64,7 @@ public class NUSGPT {
                                 + task + "\n"
                                 + horizontal_line);
                     }
-                // check if the command says to unmark an item on the list
+                    // check if the command says to unmark an item on the list
                 } else if (command.startsWith("unmark")) {
                     // get the index of the item in the list to be unmarked
                     int index = Integer.parseInt(command.substring(7).trim());
@@ -83,7 +83,7 @@ public class NUSGPT {
                                 + task + "\n"
                                 + horizontal_line);
                     }
-                // check if the command is to delete a task from the task list
+                    // check if the command is to delete a task from the task list
                 } else if (command.startsWith("delete")) {
                     // get the index of the item in the list to be deleted
                     int index = Integer.parseInt(command.substring(7).trim());
@@ -102,7 +102,7 @@ public class NUSGPT {
                                 + "Now you have " + tasks.size() + " tasks in the list.\n"
                                 + horizontal_line);
                     }
-                // check if the task is a todo task
+                    // check if the task is a todo task
                 } else if (command.startsWith("todo")) {
                     // get description of todo from input
                     String description = command.length() >= 5 ? command.substring(5).trim() : "";
@@ -127,7 +127,7 @@ public class NUSGPT {
                         // if there is no space in the task list throw an error
                         throw new NUSGPTException("no space for new tasks in task list.\n");
                     }
-                // check if the task is a deadline task
+                    // check if the task is a deadline task
                 } else if (command.startsWith("deadline")) {
                     // the date of the deadline is after the " /by " text
                     int dateIndex = command.indexOf(" /by ");
@@ -143,8 +143,17 @@ public class NUSGPT {
                     if (description.isEmpty()) {
                         throw new NUSGPTException("please provide a description for the deadline task.\n");
                     }
+                    // if the date is empty throw an error
                     if (date.isEmpty()) {
                         throw new NUSGPTException("please provide a date for the deadline task.\n");
+                    }
+                    // check if the date text is in the date format
+                    if (DateTime.matchDateFormat(date)) {
+                        try {
+                            DateTime.parseUserInput(date);
+                        } catch (IllegalArgumentException ex) {
+                            throw new NUSGPTException(ex.getMessage() + "\n");
+                        }
                     }
                     // check if there is space in the task list
                     if (tasks.size() < maxTasks) {
@@ -163,7 +172,7 @@ public class NUSGPT {
                         // if there is no space in the task list throw an error
                         throw new NUSGPTException("no space for new tasks in task list.\n");
                     }
-                // check if the task is an event task
+                    // check if the task is an event task
                 } else if (command.startsWith("event")) {
                     // get information of the event task from the input
                     String taskInfo = command.length() >= 6 ? command.substring(6) : "";
@@ -200,6 +209,22 @@ public class NUSGPT {
                     // if the end time is empty throw an error
                     if (end.isEmpty()) {
                         throw new NUSGPTException("please provide a time for the end of the event task.\n");
+                    }
+                    // check if the start text is in the date format
+                    if (DateTime.matchDateFormat(start)) {
+                        try {
+                            DateTime.parseUserInput(start);
+                        } catch (IllegalArgumentException ex) {
+                            throw new NUSGPTException(ex.getMessage() + "\n");
+                        }
+                    }
+                    // check if the end text is in the date format
+                    if (DateTime.matchDateFormat(end)) {
+                        try {
+                            DateTime.parseUserInput(end);
+                        } catch (IllegalArgumentException ex) {
+                            throw new NUSGPTException(ex.getMessage() + "\n");
+                        }
                     }
                     // check if there is space in the task list
                     if (tasks.size() < maxTasks) {
