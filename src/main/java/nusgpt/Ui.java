@@ -1,3 +1,5 @@
+package nusgpt;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -5,7 +7,7 @@ public class Ui {
     // horizontal line template
     private static final String HORIZONTAL_LINE = "____________________________________________________________\n";
 
-    // constructor for Ui class
+    // constructor for nusgpt.Ui class
     public Ui() {
         scanner = new Scanner(System.in);
     }

@@ -1,3 +1,5 @@
+package nusgpt;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -144,6 +146,6 @@ public class NUSGPT {
     }
 
     public static void main(String[] args) {
-        new NUSGPT("data/NUSGPT.txt").run();
+        new NUSGPT("data/nusgpt.NUSGPT.txt").run();
     }
 }

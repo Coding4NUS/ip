@@ -1,3 +1,5 @@
+package nusgpt;
+
 public class Parser {
 
     // all the supported command types
