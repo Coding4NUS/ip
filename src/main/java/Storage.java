@@ -5,18 +5,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Storage {
-    // hard-coded relative file path
-    private static final String FILE_PATH = "./data/NUSGPT.txt";
+    // path to data storage file
+    private final String filePath;
     // symbol that separates data types
     private static final String SEPARATOR = " | ";
 
-    public ArrayList<Task> load() throws IOException {
-        ArrayList<Task> tasks = new ArrayList<>();
-        File file = new File(FILE_PATH);
+    // constructor for storage class
+    public Storage(String filePath) {
+        this.filePath = filePath;
+    }
 
+    // load tasks from data storage
+    public ArrayList<Task> load() throws IOException {
+        // array list to store the tasks
+        ArrayList<Task> tasks = new ArrayList<>();
+        // represents storage file
+        File file = new File(filePath);
         // ensures data file exists
         ensureDataFileExists();
-
         // use scanner to read the data file
         try (Scanner fileScanner = new Scanner(file)) {
             // check every line of text in the data file
@@ -27,14 +33,11 @@ public class Storage {
                 if (line.isEmpty()) {
                     continue;
                 }
-                // convert the text to a task and add it to the task list
-                try {
-                    Task t = parseLine(line);
-                    if (t != null) {
-                        tasks.add(t);
-                    }
-                } catch (RuntimeException ex) {
-                    // ignore runtime error
+                // try to parse text to task
+                Task task = parseLine(line);
+                if (task != null) {
+                    // if it can parse add it to task list
+                    tasks.add(task);
                 }
             }
         }
@@ -45,9 +48,8 @@ public class Storage {
     public void save(ArrayList<Task> tasks) throws IOException {
         // ensures data file exists
         ensureDataFileExists();
-
-        // opens filewriter which overwrites the file each time
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
+        // opens file writer which overwrites the file each time
+        try (FileWriter writer = new FileWriter(filePath)) {
             // for each task in the task list
             for (Task t : tasks) {
                 // write the task in the data storage format
@@ -60,17 +62,17 @@ public class Storage {
 
     // create data file if it is missing
     private void ensureDataFileExists() throws IOException {
-        // reference to the ./data path
-        File directory = new File("./data");
-        // check if ./data path currently exists
-        if (!directory.exists()) {
+        // represents storage file
+        File file = new File(filePath);
+        // represents directory file
+        File directory = file.getParentFile();
+        // check if data path currently exists
+        if (directory != null && !directory.exists()) {
             // if mkdirs cannot make the directory throw exception
             if (!directory.mkdirs()) {
                 throw new IOException("could not create data directory: " + directory.getPath());
             }
         }
-        // reference to the data storage path
-        File file = new File(FILE_PATH);
         // check if data storage file currently exists
         if (!file.exists()) {
             // if the data storage file cannot be created throw exception
@@ -89,7 +91,7 @@ public class Storage {
         // if task is done or not
         int done = Integer.parseInt(parts[1].trim());
         // task description
-        String description = parts[2];
+        String desc = parts[2];
         // new task which stores data
         Task task;
 
@@ -99,28 +101,24 @@ public class Storage {
                 if (parts.length != 3) {
                     return null;
                 }
-                task = new ToDo(description);
+                task = new ToDo(desc);
                 break;
             // create deadline task
             case "D":
                 if (parts.length != 4) {
                     return null;
                 }
-                String by = parts[3].trim();
-                task = new Deadline(description, by);
+                String byStored = parts[3].trim();
+                task = new Deadline(desc, byStored);
                 break;
             // create event task
             case "E":
                 if (parts.length != 5) {
                     return null;
                 }
-                String from = parts[3];
-                String to = parts[4];
-                // if there is no from or to return null
-                if (from.isEmpty() || to.isEmpty()) {
-                    return null;
-                }
-                task = new Event(description, from, to);
+                String start = parts[3].trim();
+                String end = parts[4].trim();
+                task = new Event(desc, start, end);
                 break;
             // if none of the task types are recognised throw error
             default:
