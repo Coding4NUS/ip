@@ -75,6 +75,9 @@ public class NUSGPT {
                 case LIST:
                     ui.showList(tasks);
                     break;
+                case FIND:
+                    ui.showFindResults(tasks.findByKeyword(cmd.description));
+                    break;
                 case MARK: {
                     Task t = getTaskByIndex(cmd.index);
                     t.markDone();
