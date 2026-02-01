@@ -6,18 +6,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Saves tasks to and loads tasks from storage file
+ */
 public class Storage {
     // path to data storage file
     private final String filePath;
     // symbol that separates data types
     private static final String SEPARATOR = " | ";
 
-    // constructor for storage class
+    /**
+     * Constructor for storage class
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
-    // load tasks from data storage
+    /**
+     * Loads tasks from storage file
+     *
+     * @return ArrayList<Task> array list of tasks from the storage file
+     * @throws IOException if storage file cannot be read or created
+     */
     public ArrayList<Task> load() throws IOException {
         // array list to store the tasks
         ArrayList<Task> tasks = new ArrayList<>();
@@ -47,6 +57,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves tasks to storage file
+     *
+     * @param tasks array list of tasks from the storage file
+     * @throws IOException if cannot write to storage file
+     */
     public void save(ArrayList<Task> tasks) throws IOException {
         // ensures data file exists
         ensureDataFileExists();
@@ -62,7 +78,11 @@ public class Storage {
         }
     }
 
-    // create data file if it is missing
+    /**
+     * Checks if data file exists and creates one if it is missing
+     *
+     * @throws IOException if it cannot make a directory or file
+     */
     private void ensureDataFileExists() throws IOException {
         // represents storage file
         File file = new File(filePath);
@@ -84,7 +104,12 @@ public class Storage {
         }
     }
 
-    // converts line of text to a task
+    /**
+     * Converts line of user input to task
+     *
+     * @param line line of user input
+     * @return Task task from user input
+     */
     private Task parseLine(String line) {
         // splits the line by the separator
         String[] parts = line.split("\\Q" + SEPARATOR + "\\E", -1);

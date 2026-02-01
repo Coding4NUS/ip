@@ -12,7 +12,13 @@ public class Deadline extends Task {
         checkDate(date);
     }
 
-    // check date text to see if needed to parse
+    /**
+     * Check if date text fits date format
+     * If it fits parse the text into date format
+     * If it does not fit make it text
+     *
+     * @param string date text
+     */
     private void checkDate(String string) {
         // check if date text is null or empty
         if (string == null) {
@@ -42,6 +48,11 @@ public class Deadline extends Task {
         HasTime = parsed.hasTime();
     }
 
+    /**
+     * String of date for deadline
+     *
+     * @return String date in either text or date/time format
+     */
     public String getTime() {
         if (taskDateTime != null) {
             return DateTime.datePrintFormat(taskDateTime, HasTime);
@@ -49,6 +60,11 @@ public class Deadline extends Task {
         return text;
     }
 
+    /**
+     * String format of deadline information
+     *
+     * @return String format for deadline
+     */
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + getTime() + ")";

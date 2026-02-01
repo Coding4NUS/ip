@@ -34,7 +34,9 @@ public class NUSGPT {
         tasks = loadedTaskList;
     }
 
-    // start the application
+    /**
+     * Runs the application
+     */
     public void run() {
         // print greeting template
         ui.showGreeting();
@@ -60,7 +62,12 @@ public class NUSGPT {
         }
     }
 
-    // execute user command
+    /**
+     * Matches user input with command and executes it
+     *
+     * @param cmd Parsed user command
+     * @throws NUSGPTException If command cannot be identified
+     */
     private void execute(Parser.ParsedCommand cmd) throws NUSGPTException {
         // try the given command
         try {
@@ -122,27 +129,43 @@ public class NUSGPT {
         }
     }
 
-    // check if the task list has space for new tasks
+    /**
+     * Check if the task list has space for new tasks
+     *
+     * @throws NUSGPTException If there is no space in the task list
+     */
     private void checkTaskListCapacity() throws NUSGPTException {
         if (tasks.size() >= MAX_TASKS) {
             throw new NUSGPTException("no space for new tasks in task list.\n");
         }
     }
 
-    // get task from task list with the given index
-    private Task getTaskByIndex(int userIndex) throws NUSGPTException {
-        if (userIndex < 1 || userIndex > tasks.size()) {
-            throw new NUSGPTException(userIndex + " is not a valid index\n");
+    /**
+     * Get task from task list with given index
+     *
+     * @param index index of task
+     * @return Task task
+     * @throws NUSGPTException If index does not match any task in task list
+     */
+    private Task getTaskByIndex(int index) throws NUSGPTException {
+        if (index < 1 || index > tasks.size()) {
+            throw new NUSGPTException(index + " is not a valid index\n");
         }
-        return tasks.get(userIndex - 1);
+        return tasks.get(index - 1);
     }
 
-    // remove task from task list with the given index
-    private Task removeTaskByUserIndex(int userIndex) throws NUSGPTException {
-        if (userIndex < 1 || userIndex > tasks.size()) {
-            throw new NUSGPTException(userIndex + " is not a valid index\n");
+    /**
+     * Remove task from task list with given index
+     *
+     * @param index index of task
+     * @return Task task
+     * @throws NUSGPTException If index does not match any task in task list
+     */
+    private Task removeTaskByUserIndex(int index) throws NUSGPTException {
+        if (index < 1 || index > tasks.size()) {
+            throw new NUSGPTException(index + " is not a valid index\n");
         }
-        return tasks.remove(userIndex - 1);
+        return tasks.remove(index - 1);
     }
 
     public static void main(String[] args) {
