@@ -1,5 +1,6 @@
 package nusgpt;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Ui {
@@ -58,6 +59,20 @@ public class Ui {
         // for each item in the list print it in order
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + ". " + tasks.get(i));
+        }
+        System.out.println(HORIZONTAL_LINE);
+    }
+
+    /**
+     * Shows list of tasks whose description matches keyword
+     *
+     * @param matches list of tasks with matching descriptions
+     */
+    public void showFindResults(List<Task> matches) {
+        System.out.println(HORIZONTAL_LINE);
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println((i + 1) + ". " + matches.get(i));
         }
         System.out.println(HORIZONTAL_LINE);
     }

@@ -4,7 +4,7 @@ public class Parser {
 
     // all the supported command types
     public enum CommandType {
-        LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, BYE
+        LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND, BYE
     }
 
     // represents the data of parsed command
@@ -50,6 +50,16 @@ public class Parser {
         public static ParsedCommand event(String description, String from, String to) {
             return new ParsedCommand(CommandType.EVENT, -1, description, null, from, to);
         }
+
+        /**
+         * Find a task by searching for a keyword in the task description
+         *
+         * @param keyword word in task description you are finding
+         * @return ParsedCommand command to find the task
+         */
+        public static ParsedCommand find(String keyword) {
+            return new ParsedCommand(CommandType.FIND, -1, keyword, null, null, null);
+        }
     }
 
     // parse command
@@ -70,6 +80,14 @@ public class Parser {
         // if input is "list" return list command
         if (command.equals("list")) {
             return ParsedCommand.simple(CommandType.LIST);
+        }
+        // if input is "find" return find command
+        if (command.startsWith("find")) {
+            final String keyword = command.length() > 4 ? command.substring(4).trim() : "";
+            if (keyword.isEmpty()) {
+                throw new NUSGPTException("please provide a keyword to find.\n");
+            }
+            return ParsedCommand.find(keyword);
         }
         // if input is "mark" parse index then return mark command
         if (command.startsWith("mark")) {
@@ -178,7 +196,7 @@ public class Parser {
             return ParsedCommand.event(description, start, end);
         }
         // if command does not match any task throw error
-        throw new NUSGPTException("unidentified instruction. the following tasks are valid: todo, event, deadline\n");
+        throw new NUSGPTException("unidentified instruction. the following tasks are valid: todo, event, deadline, find\n");
     }
 
     // parse indexes

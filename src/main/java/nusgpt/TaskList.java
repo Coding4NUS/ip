@@ -41,4 +41,23 @@ public class TaskList {
     public ArrayList<Task> taskArrayList() {
         return tasks;
     }
+
+    /**
+     * Returns array list of tasks with descriptions that match the keyword
+     *
+     * @param keyword word user is searching for
+     * @return ArrayList<Task> array list of tasks with keyword in description
+     */
+    public ArrayList<Task> findByKeyword(String keyword) {
+        final ArrayList<Task> matches = new ArrayList<>();
+        final String word = keyword.trim().toLowerCase();
+
+        for (Task t : tasks) {
+            final String description = t.getDescription().toLowerCase();
+            if (description.contains(word)) {
+                matches.add(t);
+            }
+        }
+        return matches;
+    }
 }
