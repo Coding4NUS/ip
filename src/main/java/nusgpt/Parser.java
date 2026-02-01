@@ -142,6 +142,16 @@ public class Parser {
             if (endIndex < startIndex) {
                 throw new NUSGPTException("use the format: event (description) /from (start) /to (end)\n");
             }
+            // if no start time is given throw an error
+            int startValueBegin = startIndex + 7;
+            if (startValueBegin > endIndex) {
+                throw new NUSGPTException("please provide a time for the start of the event task.\n");
+            }
+            // if no end time is given throw an error
+            int endValueBegin = endIndex + 5;
+            if (endValueBegin > taskInfo.length()) {
+                throw new NUSGPTException("please provide a time for the end of the event task.\n");
+            }
             // get the description of the event task from the input
             String description = taskInfo.substring(0, startIndex).trim();
             // get the start of the deadline task from the input
