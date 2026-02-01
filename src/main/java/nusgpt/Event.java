@@ -17,6 +17,11 @@ public class Event extends Task {
         setEnd(endRaw);
     }
 
+    /**
+     * Parses and stores the start date for the event
+     *
+     * @param string start date text
+     */
     private void setStart(String string) {
         String startDate;
         // check if date text is null or empty
@@ -45,13 +50,18 @@ public class Event extends Task {
         startText = null;
     }
 
-    private void setEnd(String raw) {
+    /**
+     * Parses and stores the end date for the event
+     *
+     * @param string end date text
+     */
+    private void setEnd(String string) {
         String endDate;
         // check if date text is null or empty
-        if (raw == null) {
+        if (string == null) {
             endDate = "";
         } else {
-            endDate = raw.trim();
+            endDate = string.trim();
         }
         if (endDate.isEmpty()) {
             endText = "";
@@ -73,6 +83,11 @@ public class Event extends Task {
         endText = null;
     }
 
+    /**
+     * Returns the start date for the event
+     *
+     * @return String text for the start date
+     */
     public String getStart() {
         if (startDateTime != null) {
             return DateTime.datePrintFormat(startDateTime, startHasTime);
@@ -80,6 +95,11 @@ public class Event extends Task {
         return startText;
     }
 
+    /**
+     * Returns the end date for the event
+     *
+     * @return String text for the end date
+     */
     public String getEnd() {
         if (endDateTime != null) {
             return DateTime.datePrintFormat(endDateTime, endHasTime);
@@ -87,11 +107,21 @@ public class Event extends Task {
         return endText;
     }
 
+    /**
+     * String format of event information
+     *
+     * @return String format for event
+     */
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + getStart() + " to: " + getEnd() + ")";
     }
 
+    /**
+     * Converts start and end dates to storage format
+     *
+     * @return String storage format for start and end dates
+     */
     @Override
     public String toFileString() {
         // store date in storage format

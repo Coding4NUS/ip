@@ -8,7 +8,9 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 
 public class DateTime {
-
+    /**
+     * Wrapper representing a parsed date/time value
+     */
     public static class ParsedDateTime {
         // stores the parsed date/time value
         private final LocalDateTime dateTime;
@@ -56,7 +58,12 @@ public class DateTime {
     private static final DateTimeFormatter PRINT_DATETIME =
             DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm");
 
-    // if input matches date format then parse
+    /**
+     * Check if user input string matches date format
+     *
+     * @param raw user input string
+     * @return true if string follows the date format / false if it does not
+     */
     public static boolean matchDateFormat(String raw) {
         // if the raw string is null or empty return false
         if (raw == null) {
@@ -70,7 +77,13 @@ public class DateTime {
         return (string.contains("-") || string.contains("/")) && string.chars().anyMatch(Character::isDigit);
     }
 
-    // parses user input
+    /**
+     * Parses user input in relevant format
+     *
+     * @param raw user input string
+     * @return ParsedDateTime
+     * @throws IllegalArgumentException If invalid date/time format
+     */
     public static ParsedDateTime parseUserInput(String raw) {
         String string = raw.trim();
 
@@ -94,7 +107,13 @@ public class DateTime {
         return hasTime ? dt.format(PRINT_DATETIME) : dt.toLocalDate().format(PRINT_DATE);
     }
 
-    // date format for data storage
+    /**
+     * Parses date text by comparing it to formats
+     *
+     * @param dt String of date text
+     * @return String
+     * @throws DateTimeParseException If no match.
+     */
     public static String dateStorageFormat(LocalDateTime dt, boolean hasTime) {
         return hasTime ? dt.format(STORAGE_DATETIME) : dt.toLocalDate().format(STORAGE_DATE);
     }
@@ -113,6 +132,14 @@ public class DateTime {
         return null;
     }
 
+    /**
+     * Parses date text by comparing it to formats
+     * If it does not match throw exception
+     *
+     * @param s String of date text
+     * @return LocalDate
+     * @throws DateTimeParseException If no match.
+     */
     private static LocalDate ParseDate(String s) {
         // yyyy-MM-dd
         try {

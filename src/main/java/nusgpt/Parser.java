@@ -2,12 +2,16 @@ package nusgpt;
 
 public class Parser {
 
-    // all the supported command types
+    /**
+     * All the supported command types
+     */
     public enum CommandType {
         LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, BYE
     }
 
-    // represents the data of parsed command
+    /**
+     * Represents the data of the parsed command
+     */
     public static class ParsedCommand {
         public final CommandType type;
         public final int index;
@@ -16,7 +20,16 @@ public class Parser {
         public final String start;
         public final String end;
 
-        // constructor for ParsedCommand class
+        /**
+         * Constructor for ParsedCommand class
+         *
+         * @param type type of command
+         * @param index index of task
+         * @param description description of task
+         * @param date date of task
+         * @param start start date of task
+         * @param end end date of task
+         */
         private ParsedCommand(CommandType type, int index, String description, String date, String start, String end) {
             this.type = type;
             this.index = index;
@@ -26,33 +39,65 @@ public class Parser {
             this.end = end;
         }
 
-        // commands with no fields (list/bye)
+        /**
+         * Represents simple commands with no fields (list/bye)
+         *
+         * @return ParsedCommand parsed command of simple type
+         */
         public static ParsedCommand simple(CommandType type) {
             return new ParsedCommand(type, -1, null, null, null, null);
         }
 
-        // commands with an index (mark/unmark/delete)
+        /**
+         * Represents commands with an index (mark/unmark/delete)
+         *
+         * @return ParsedCommand parsed command with index
+         */
         public static ParsedCommand withIndex(CommandType type, int index) {
             return new ParsedCommand(type, index, null, null, null, null);
         }
 
-        // todo command
+        /**
+         * Represents todo command
+         *
+         * @param description description of todo task
+         * @return ParsedCommand todo parsed command
+         */
         public static ParsedCommand todo(String description) {
             return new ParsedCommand(CommandType.TODO, -1, description, null, null, null);
         }
 
-        // deadline command
-        public static ParsedCommand deadline(String description, String by) {
-            return new ParsedCommand(CommandType.DEADLINE, -1, description, by, null, null);
+        /**
+         * Represents deadline command
+         *
+         * @param description description of deadline task
+         * @param date date of deadline task
+         * @return ParsedCommand deadline parsed command
+         */
+        public static ParsedCommand deadline(String description, String date) {
+            return new ParsedCommand(CommandType.DEADLINE, -1, description, date, null, null);
         }
 
-        // event command
-        public static ParsedCommand event(String description, String from, String to) {
-            return new ParsedCommand(CommandType.EVENT, -1, description, null, from, to);
+        /**
+         * Represents event command
+         *
+         * @param description description of event task
+         * @param start start date of event task
+         * @param end end date of event task
+         * @return ParsedCommand event parsed command
+         */
+        public static ParsedCommand event(String description, String start, String end) {
+            return new ParsedCommand(CommandType.EVENT, -1, description, null, start, end);
         }
     }
 
-    // parse command
+    /**
+     * Parses user input and assigns command to it
+     *
+     * @param input user input
+     * @return ParsedCommand parsed command from user input
+     * @throws NUSGPTException if user input is not a valid command
+     */
     public static ParsedCommand parse(String input) throws NUSGPTException {
         // if command is null throw error
         if (input == null) {
@@ -181,7 +226,15 @@ public class Parser {
         throw new NUSGPTException("unidentified instruction. the following tasks are valid: todo, event, deadline\n");
     }
 
-    // parse indexes
+    /**
+     * Parses index given after command
+     *
+     * @param command user input
+     * @param keyword command keyword in input
+     * @param prefixLength length of command
+     * @return int index
+     * @throws NUSGPTException if index is not the correct format
+     */
     private static int parseIndex(String command, String keyword, int prefixLength) throws NUSGPTException {
         // get index text from command
         String index;
@@ -203,7 +256,12 @@ public class Parser {
         }
     }
 
-    // check if date text follows date format
+    /**
+     * Checks if the date text matches the valid formats
+     *
+     * @param raw date text
+     * @throws NUSGPTException if parsing fails
+     */
     private static void checkDateFormat(String raw) throws NUSGPTException {
         if (DateTime.matchDateFormat(raw)) {
             try {
