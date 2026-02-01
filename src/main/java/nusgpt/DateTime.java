@@ -75,13 +75,13 @@ public class DateTime {
         String string = raw.trim();
 
         // try date/time format
-        ParsedDateTime dt = ParseDateTime(string);
+        ParsedDateTime dt = parseDateTime(string);
         if (dt != null) {
             return dt;
         }
 
         // try date format
-        LocalDate date = ParseDate(string);
+        LocalDate date = parseDate(string);
         if (date != null) {
             return new ParsedDateTime(LocalDateTime.of(date, LocalTime.MIDNIGHT), false);
         }
@@ -99,7 +99,7 @@ public class DateTime {
         return hasTime ? dt.format(STORAGE_DATETIME) : dt.toLocalDate().format(STORAGE_DATE);
     }
 
-    private static ParsedDateTime ParseDateTime(String s) {
+    private static ParsedDateTime parseDateTime(String s) {
         // yyyy-MM-dd HHmm
         try {
             return new ParsedDateTime(LocalDateTime.parse(s, INPUT_YMD_TIME), true);
@@ -113,7 +113,7 @@ public class DateTime {
         return null;
     }
 
-    private static LocalDate ParseDate(String s) {
+    private static LocalDate parseDate(String s) {
         // yyyy-MM-dd
         try {
             return LocalDate.parse(s, INPUT_YMD);
