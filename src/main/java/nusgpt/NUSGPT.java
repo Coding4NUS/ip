@@ -132,6 +132,69 @@ public class NUSGPT {
         }
     }
 
+    private String executeForGui(Parser.ParsedCommand cmd) {
+        try {
+            switch (cmd.type) {
+                case LIST:
+                    return ui.formatList(tasks);
+
+                case FIND:
+                    return ui.formatFindResults(tasks.findByKeyword(cmd.description));
+
+                case MARK: {
+                    Task t = getTaskByIndex(cmd.index);
+                    t.markDone();
+                    storage.save(tasks.taskArrayList());
+                    return ui.formatTaskMarked(t);
+                }
+
+                case UNMARK: {
+                    Task t = getTaskByIndex(cmd.index);
+                    t.markNotDone();
+                    storage.save(tasks.taskArrayList());
+                    return ui.formatTaskUnmarked(t);
+                }
+
+                case DELETE: {
+                    Task removed = removeTaskByUserIndex(cmd.index);
+                    storage.save(tasks.taskArrayList());
+                    return ui.formatTaskRemoved(removed, tasks.size());
+                }
+
+                case TODO: {
+                    checkTaskListCapacity();
+                    Task task = new ToDo(cmd.description);
+                    tasks.add(task);
+                    storage.save(tasks.taskArrayList());
+                    return ui.formatTaskAdded(task, tasks.size());
+                }
+
+                case DEADLINE: {
+                    checkTaskListCapacity();
+                    Task task = new Deadline(cmd.description, cmd.date);
+                    tasks.add(task);
+                    storage.save(tasks.taskArrayList());
+                    return ui.formatTaskAdded(task, tasks.size());
+                }
+
+                case EVENT: {
+                    checkTaskListCapacity();
+                    Task task = new Event(cmd.description, cmd.start, cmd.end);
+                    tasks.add(task);
+                    storage.save(tasks.taskArrayList());
+                    return ui.formatTaskAdded(task, tasks.size());
+                }
+
+                default:
+                    return ui.formatError("unidentified instruction.\n");
+            }
+        } catch (IOException e) {
+            return ui.formatSaveError();
+        } catch (NUSGPTException e) {
+            return ui.formatError(e.getMessage());
+        }
+    }
+
     /**
      * Check if the task list has space for new tasks
      *
@@ -173,5 +236,35 @@ public class NUSGPT {
 
     public static void main(String[] args) {
         new NUSGPT("data/nusgpt.NUSGPT.txt").run();
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        try {
+            Parser.ParsedCommand command = Parser.parse(input);
+
+            if (command.type == Parser.CommandType.BYE) {
+                return ui.formatBye();
+            }
+
+            return executeForGui(command);
+
+        } catch (NUSGPTException e) {
+            return ui.formatError(e.getMessage());
+        }
+    }
+
+    public String getGreeting() {
+        return ui.formatGreeting();
+    }
+
+    public boolean isExitCommand(String input) {
+        try {
+            return Parser.parse(input).type == Parser.CommandType.BYE;
+        } catch (NUSGPTException e) {
+            return false;
+        }
     }
 }
