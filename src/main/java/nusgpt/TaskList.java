@@ -14,6 +14,7 @@ public class TaskList {
 
     // constructor for given task list copies it to new task list
     public TaskList(List<Task> initial) {
+        assert initial != null : "initial task list must not be null";
         this.tasks = new ArrayList<>(initial);
     }
 
@@ -24,6 +25,7 @@ public class TaskList {
 
     // returns the task from the index in task list
     public Task get(int index) {
+        assert index >= 0 && index < tasks.size() : "index must be within [0, size)";
         return tasks.get(index);
     }
 
@@ -34,6 +36,7 @@ public class TaskList {
 
     // removes the task from the index in task list
     public Task remove(int indexZeroBased) {
+        assert indexZeroBased >= 0 && indexZeroBased < tasks.size() : "index must be within [0, size)";
         return tasks.remove(indexZeroBased);
     }
 
@@ -49,6 +52,7 @@ public class TaskList {
      * @return ArrayList<Task> array list of tasks with keyword in description
      */
     public ArrayList<Task> findByKeyword(String keyword) {
+        assert keyword != null : "keyword must not be null";
         final ArrayList<Task> matches = new ArrayList<>();
         final String word = keyword.trim().toLowerCase();
 
