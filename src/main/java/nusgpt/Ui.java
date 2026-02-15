@@ -104,11 +104,7 @@ public class Ui {
 
     // template for showing list of tasks
     public void showList(TaskList tasks) {
-        System.out.println("Here are the tasks in your list:");
-        // for each item in the list print it in order
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + ". " + tasks.get(i));
-        }
+        System.out.print(formatList(tasks));
     }
 
     /**
@@ -117,17 +113,12 @@ public class Ui {
      * @param matches list of tasks with matching descriptions
      */
     public void showFindResults(List<Task> matches) {
-        System.out.println("Here are the matching tasks in your list:");
-        for (int i = 0; i < matches.size(); i++) {
-            System.out.println((i + 1) + ". " + matches.get(i));
-        }
+        System.out.print(formatFindResults(matches));
     }
 
     // template for telling user task is added
     public void showTaskAdded(Task task, int size) {
-        System.out.println("Got it. I've added this task:\n"
-                + task + "\n"
-                + "Now you have " + size + " tasks in the list.\n");
+        System.out.print(formatTaskAdded(task, size));
     }
 
     // template for telling user task is removed

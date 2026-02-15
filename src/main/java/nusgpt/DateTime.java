@@ -99,16 +99,40 @@ public class DateTime {
         return hasTime ? dt.format(STORAGE_DATETIME) : dt.toLocalDate().format(STORAGE_DATE);
     }
 
+    /**
+     * Returns null when invalid input
+     *
+     * @param raw user input string
+     */
+    public static ParsedDateTime tryParseUserInput(String raw) {
+        if (raw == null) {
+            return null;
+        }
+        String trimmed = raw.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+        try {
+            return parseUserInput(trimmed);
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
+
     private static ParsedDateTime ParseDateTime(String s) {
         // yyyy-MM-dd HHmm
         try {
             return new ParsedDateTime(LocalDateTime.parse(s, INPUT_YMD_TIME), true);
-        } catch (DateTimeParseException ignored) { }
+        } catch (DateTimeParseException ignored) {
+            // ignore to try other formats
+        }
 
         // d/M/yyyy HHmm
         try {
             return new ParsedDateTime(LocalDateTime.parse(s, INPUT_DMY_TIME), true);
-        } catch (DateTimeParseException ignored) { }
+        } catch (DateTimeParseException ignored) {
+            // ignore to try date-only formats
+        }
 
         return null;
     }
@@ -117,13 +141,16 @@ public class DateTime {
         // yyyy-MM-dd
         try {
             return LocalDate.parse(s, INPUT_YMD);
-        } catch (DateTimeParseException ignored) { }
+        } catch (DateTimeParseException ignored) {
+            // ignore to try other formats
+        }
 
         // d/M/yyyy
         try {
             return LocalDate.parse(s, INPUT_DMY);
-        } catch (DateTimeParseException ignored) { }
-
+        } catch (DateTimeParseException ignored) {
+            // if all parsing fails caller will treat as invalid
+        }
         return null;
     }
 }
