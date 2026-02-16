@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Deadline extends Task {
     private LocalDateTime taskDateTime;
-    private boolean HasTime;
+    private boolean hasTime;
     private String text;
 
     public Deadline(String description, String date) {
@@ -22,31 +22,36 @@ public class Deadline extends Task {
     private void checkDate(String string) {
         // check if date text is null or empty
         if (string == null) {
-            text = "";
-            taskDateTime = null;
-            HasTime = false;
+            setAsText("");
             return;
         }
         String date = string.trim();
         if (date.isEmpty()) {
-            text = "";
-            taskDateTime = null;
-            HasTime = false;
+            setAsText("");
             return;
         }
         // check if date text does not fit date format
         if (!DateTime.matchDateFormat(date)) {
-            text = date;
-            taskDateTime = null;
-            HasTime = false;
+            setAsText(date);
             return;
         }
         // if date text fits format parse
         DateTime.ParsedDateTime parsed = DateTime.parseUserInput(date);
-        text = null;
-        taskDateTime = parsed.getDateTime();
-        HasTime = parsed.hasTime();
-        assert taskDateTime != null : "taskDateTime must be set after successful parse";
+
+        this.text = "";
+        this.taskDateTime = parsed.getDateTime();
+        this.hasTime = parsed.hasTime();
+    }
+
+    /**
+     * Helper to keep invariants consistent
+     *
+     * @param string string to set text to
+     */
+    private void setAsText(String string) {
+        this.text = string;
+        this.taskDateTime = null;
+        this.hasTime = false;
     }
 
     /**
@@ -56,7 +61,7 @@ public class Deadline extends Task {
      */
     public String getTime() {
         if (taskDateTime != null) {
-            return DateTime.datePrintFormat(taskDateTime, HasTime);
+            return DateTime.datePrintFormat(taskDateTime, hasTime);
         }
         return text;
     }
@@ -75,7 +80,7 @@ public class Deadline extends Task {
     public String toFileString() {
         // store date in storage format
         String stored = (taskDateTime != null)
-                ? DateTime.dateStorageFormat(taskDateTime, HasTime)
+                ? DateTime.dateStorageFormat(taskDateTime, hasTime)
                 : text;
         return "D | " + (isDone() ? "1" : "0") + " | " + getDescription() + " | " + stored;
     }
