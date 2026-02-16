@@ -6,7 +6,7 @@ public class Parser {
      * All the supported command types
      */
     public enum CommandType {
-        LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND, BYE
+        LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT, FIND, BYE, HELP
     }
 
     /**
@@ -101,6 +101,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Extracts keyword from command and finds tasks with keyword
+     *
+     * @param command user input
+     * @return ParsedCommand tasks found from keyword
+     * @throws NUSGPTException if keyword is not provided
+     */
     private static ParsedCommand parseFind(String command) throws NUSGPTException {
         final String keyword = command.length() > 4 ? command.substring(4).trim() : "";
         if (keyword.isEmpty()) {
@@ -109,6 +116,13 @@ public class Parser {
         return ParsedCommand.find(keyword);
     }
 
+    /**
+     * Parses ToDo command from user input
+     *
+     * @param command user input
+     * @return ParsedCommand todo command from user input
+     * @throws NUSGPTException if description is not provided
+     */
     private static ParsedCommand parseTodo(String command) throws NUSGPTException {
         String description = command.length() >= 5 ? command.substring(5).trim() : "";
         if (description.isEmpty()) {
@@ -117,6 +131,13 @@ public class Parser {
         return ParsedCommand.todo(description);
     }
 
+    /**
+     * Parses Deadline command from user input
+     *
+     * @param command user input
+     * @return ParsedCommand deadline command from user input
+     * @throws NUSGPTException if input does not follow deadline format
+     */
     private static ParsedCommand parseDeadline(String command) throws NUSGPTException {
         int dateIndex = command.indexOf(" /by ");
         if (dateIndex == -1) {
@@ -137,6 +158,13 @@ public class Parser {
         return ParsedCommand.deadline(description, date);
     }
 
+    /**
+     * Parses Event command from user input
+     *
+     * @param command user input
+     * @return ParsedCommand event command from user input
+     * @throws NUSGPTException if input does not follow event format
+     */
     private static ParsedCommand parseEvent(String command) throws NUSGPTException {
         String taskInfo = command.length() >= 6 ? command.substring(6) : "";
         int startIndex = taskInfo.indexOf(" /from ");
@@ -185,6 +213,9 @@ public class Parser {
 
         if (command.equals("bye")) {
             return ParsedCommand.simple(CommandType.BYE);
+        }
+        if (command.equals("help")) {
+            return ParsedCommand.simple(CommandType.HELP);
         }
         if (command.equals("list")) {
             return ParsedCommand.simple(CommandType.LIST);
