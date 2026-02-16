@@ -111,14 +111,18 @@ public class Storage {
      * @return Task task from user input
      */
     private Task parseLine(String line) {
+        assert line != null : "line must not be null";
         // splits the line by the separator
         String[] parts = line.split("\\Q" + SEPARATOR + "\\E", -1);
+        assert parts.length >= 3 : "storage line must have at least 3 parts";
         // task type
         String type = parts[0].trim();
         // if task is done or not
         int done = Integer.parseInt(parts[1].trim());
+        assert done == 0 || done == 1 : "done flag must be 0 or 1";
         // task description
         String desc = parts[2];
+        assert desc != null : "description field must not be null";
         // new task which stores data
         Task task;
 

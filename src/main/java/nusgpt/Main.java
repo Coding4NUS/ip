@@ -19,6 +19,10 @@ public class Main extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
+
+            assert ap != null : "AnchorPane must not be null";
+            assert fxmlLoader.getController() != null : "MainWindow controller must not be null";
+
             Scene scene = new Scene(ap);
             stage.setScene(scene);
             fxmlLoader.<MainWindow>getController().setNUSGPT(nusgpt);  // inject the NUSGPT instance

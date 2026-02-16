@@ -224,6 +224,7 @@ public class Parser {
      * @throws NUSGPTException if index is not the correct format
      */
     private static int parseIndex(String command, String keyword, int prefixLength) throws NUSGPTException {
+        assert prefixLength >= 0 : "prefixLength must be non-negative";
         // get index text from command
         String index;
         if (command.length() > prefixLength) {

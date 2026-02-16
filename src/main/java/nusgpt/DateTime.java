@@ -72,6 +72,7 @@ public class DateTime {
 
     // parses user input
     public static ParsedDateTime parseUserInput(String raw) {
+        assert raw != null : "user input should not be null";
         String string = raw.trim();
 
         // try date/time format
@@ -120,6 +121,7 @@ public class DateTime {
     }
 
     private static ParsedDateTime ParseDateTime(String s) {
+        assert s != null : "string should not be null";
         // yyyy-MM-dd HHmm
         try {
             return new ParsedDateTime(LocalDateTime.parse(s, INPUT_YMD_TIME), true);
@@ -138,6 +140,7 @@ public class DateTime {
     }
 
     private static LocalDate ParseDate(String s) {
+        assert s != null : "string should not be null";
         // yyyy-MM-dd
         try {
             return LocalDate.parse(s, INPUT_YMD);
@@ -154,4 +157,3 @@ public class DateTime {
         return null;
     }
 }
-

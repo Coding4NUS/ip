@@ -48,6 +48,7 @@ public class Event extends Task {
         startDateTime = parsed.getDateTime();
         startHasTime = parsed.hasTime();
         startText = null;
+        assert startDateTime != null : "startDateTime must be set after successful parse";
     }
 
     /**
@@ -81,6 +82,7 @@ public class Event extends Task {
         endDateTime = parsed.getDateTime();
         endHasTime = parsed.hasTime();
         endText = null;
+        assert endDateTime != null : "endDateTime must be set after successful parse";
     }
 
     /**
@@ -92,6 +94,7 @@ public class Event extends Task {
         if (startDateTime != null) {
             return DateTime.datePrintFormat(startDateTime, startHasTime);
         }
+        assert !startHasTime : "startHasTime must be false when startDateTime is null";
         return startText;
     }
 
@@ -104,6 +107,7 @@ public class Event extends Task {
         if (endDateTime != null) {
             return DateTime.datePrintFormat(endDateTime, endHasTime);
         }
+        assert !endHasTime : "endHasTime must be false when endDateTime is null";
         return endText;
     }
 
