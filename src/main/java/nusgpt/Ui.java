@@ -32,6 +32,7 @@ public class Ui {
     }
 
     public String formatList(TaskList tasks) {
+        assert tasks != null : "tasks must not be null";
         StringBuilder sb = new StringBuilder();
         sb.append("Here are the tasks in your list:\n");
         for (int i = 0; i < tasks.size(); i++) {
@@ -41,6 +42,7 @@ public class Ui {
     }
 
     public String formatFindResults(List<Task> matches) {
+        assert matches != null : "matches must not be null";
         StringBuilder sb = new StringBuilder();
         sb.append("Here are the matching tasks in your list:\n");
         for (int i = 0; i < matches.size(); i++) {
