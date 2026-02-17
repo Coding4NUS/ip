@@ -41,6 +41,8 @@ public class Deadline extends Task {
         this.text = "";
         this.taskDateTime = parsed.getDateTime();
         this.hasTime = parsed.hasTime();
+      
+        assert this.taskDateTime != null : "taskDateTime must be set after successful parse";
     }
 
     /**
