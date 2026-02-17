@@ -101,6 +101,71 @@ public class Parser {
         }
     }
 
+    private static ParsedCommand parseFind(String command) throws NUSGPTException {
+        final String keyword = command.length() > 4 ? command.substring(4).trim() : "";
+        if (keyword.isEmpty()) {
+            throw new NUSGPTException("please provide a keyword to find.\n");
+        }
+        return ParsedCommand.find(keyword);
+    }
+
+    private static ParsedCommand parseTodo(String command) throws NUSGPTException {
+        String description = command.length() >= 5 ? command.substring(5).trim() : "";
+        if (description.isEmpty()) {
+            throw new NUSGPTException("please provide a description for the todo task.\n");
+        }
+        return ParsedCommand.todo(description);
+    }
+
+    private static ParsedCommand parseDeadline(String command) throws NUSGPTException {
+        int dateIndex = command.indexOf(" /by ");
+        if (dateIndex == -1) {
+            throw new NUSGPTException("use the format: deadline (description) /by (date)\n");
+        }
+
+        String description = command.substring(8, dateIndex).trim();
+        String date = command.substring(dateIndex + 5).trim();
+
+        if (description.isEmpty()) {
+            throw new NUSGPTException("please provide a description for the deadline task.\n");
+        }
+        if (date.isEmpty()) {
+            throw new NUSGPTException("please provide a date for the deadline task.\n");
+        }
+
+        checkDateFormat(date);
+        return ParsedCommand.deadline(description, date);
+    }
+
+    private static ParsedCommand parseEvent(String command) throws NUSGPTException {
+        String taskInfo = command.length() >= 6 ? command.substring(6) : "";
+        int startIndex = taskInfo.indexOf(" /from ");
+        int endIndex = taskInfo.indexOf(" /to ");
+
+        if (startIndex == -1 || endIndex == -1 || endIndex < startIndex) {
+            throw new NUSGPTException("use the format: event (description) /from (start) /to (end)\n");
+        }
+
+        String description = taskInfo.substring(0, startIndex).trim();
+        String start = taskInfo.substring(startIndex + 7, endIndex).trim();
+        String end = taskInfo.substring(endIndex + 5).trim();
+
+        if (description.isEmpty()) {
+            throw new NUSGPTException("please provide a description for the event task.\n");
+        }
+        if (start.isEmpty()) {
+            throw new NUSGPTException("please provide a time for the start of the event task.\n");
+        }
+        if (end.isEmpty()) {
+            throw new NUSGPTException("please provide a time for the end of the event task.\n");
+        }
+
+        checkDateFormat(start);
+        checkDateFormat(end);
+
+        return ParsedCommand.event(description, start, end);
+    }
+
     /**
      * Parses user input and assigns command to it
      *
@@ -109,138 +174,43 @@ public class Parser {
      * @throws NUSGPTException if user input is not a valid command
      */
     public static ParsedCommand parse(String input) throws NUSGPTException {
-        // if command is null throw error
         if (input == null) {
             throw new NUSGPTException("command cannot be null\n");
         }
-        // if command is empty throw error
+
         String command = input.trim();
         if (command.isEmpty()) {
             throw new NUSGPTException("command cannot be empty\n");
         }
-        // if input is "bye" return bye command
+
         if (command.equals("bye")) {
             return ParsedCommand.simple(CommandType.BYE);
         }
-        // if input is "list" return list command
         if (command.equals("list")) {
             return ParsedCommand.simple(CommandType.LIST);
         }
-        // if input is "find" return find command
         if (command.startsWith("find")) {
-            final String keyword = command.length() > 4 ? command.substring(4).trim() : "";
-            if (keyword.isEmpty()) {
-                throw new NUSGPTException("please provide a keyword to find.\n");
-            }
-            return ParsedCommand.find(keyword);
+            return parseFind(command);
         }
-        // if input is "mark" parse index then return mark command
         if (command.startsWith("mark")) {
-            int index = parseIndex(command, "mark", 5);
-            return ParsedCommand.withIndex(CommandType.MARK, index);
+            return ParsedCommand.withIndex(CommandType.MARK, parseIndex(command, "mark", 5));
         }
-        // if input is "unmark" parse index then return unmark command
         if (command.startsWith("unmark")) {
-            int index = parseIndex(command, "unmark", 7);
-            return ParsedCommand.withIndex(CommandType.UNMARK, index);
+            return ParsedCommand.withIndex(CommandType.UNMARK, parseIndex(command, "unmark", 7));
         }
-        // if input is "delete" parse index then return delete command
         if (command.startsWith("delete")) {
-            int index = parseIndex(command, "delete", 7);
-            return ParsedCommand.withIndex(CommandType.DELETE, index);
+            return ParsedCommand.withIndex(CommandType.DELETE, parseIndex(command, "delete", 7));
         }
-        // parse todo task
         if (command.startsWith("todo")) {
-            // get description of todo from input
-            String description = command.length() >= 5 ? command.substring(5).trim() : "";
-            // if description is empty throw error
-            if (description.isEmpty()) {
-                throw new NUSGPTException("please provide a description for the todo task.\n");
-            }
-            // return todo task
-            return ParsedCommand.todo(description);
+            return parseTodo(command);
         }
-        // parse deadline task
         if (command.startsWith("deadline")) {
-            // the date of the deadline is after the " /by " text
-            int dateIndex = command.indexOf(" /by ");
-            // if there is no date index throw an error
-            if (dateIndex == -1) {
-                throw new NUSGPTException("use the format: deadline (description) /by (date)\n");
-            }
-            // get the description of the deadline task from the input
-            String description = command.substring(8, dateIndex).trim();
-            // get the date of the deadline task from the input
-            String date = command.substring(dateIndex + 5).trim();
-            // if the description is empty throw an error
-            if (description.isEmpty()) {
-                throw new NUSGPTException("please provide a description for the deadline task.\n");
-            }
-            // if the date is empty throw an error
-            if (date.isEmpty()) {
-                throw new NUSGPTException("please provide a date for the deadline task.\n");
-            }
-            // check if the text fits the date format
-            checkDateFormat(date);
-            // return deadline task
-            return ParsedCommand.deadline(description, date);
+            return parseDeadline(command);
         }
-        // parse event task
         if (command.startsWith("event")) {
-            // get information of the event task from the input
-            String taskInfo = command.length() >= 6 ? command.substring(6) : "";
-            // the start of the event is after the " /from " text
-            int startIndex = taskInfo.indexOf(" /from ");
-            // the end of the event is after the " /to " text
-            int endIndex = taskInfo.indexOf(" /to ");
-            // if there is no start index throw an error
-            if (startIndex == -1) {
-                throw new NUSGPTException("invalid value for 'from' input for event task\n");
-            }
-            // if there is no start index throw an error
-            if (endIndex == -1) {
-                throw new NUSGPTException("invalid value for 'to' input for event task\n");
-            }
-            // if the format is invalid throw an error
-            if (endIndex < startIndex) {
-                throw new NUSGPTException("use the format: event (description) /from (start) /to (end)\n");
-            }
-            // if no start time is given throw an error
-            int startValueBegin = startIndex + 7;
-            if (startValueBegin > endIndex) {
-                throw new NUSGPTException("please provide a time for the start of the event task.\n");
-            }
-            // if no end time is given throw an error
-            int endValueBegin = endIndex + 5;
-            if (endValueBegin > taskInfo.length()) {
-                throw new NUSGPTException("please provide a time for the end of the event task.\n");
-            }
-            // get the description of the event task from the input
-            String description = taskInfo.substring(0, startIndex).trim();
-            // get the start of the deadline task from the input
-            String start = taskInfo.substring(startIndex + 7, endIndex).trim();
-            // get the end of the deadline task from the input
-            String end = taskInfo.substring(endIndex + 5).trim();
-            // if the description is empty throw an error
-            if (description.isEmpty()) {
-                throw new NUSGPTException("please provide a description for the event task.\n");
-            }
-            // if the start time is empty throw an error
-            if (start.isEmpty()) {
-                throw new NUSGPTException("please provide a time for the start of the event task.\n");
-            }
-            // if the end time is empty throw an error
-            if (end.isEmpty()) {
-                throw new NUSGPTException("please provide a time for the end of the event task.\n");
-            }
-            // check if the start text fits the date format
-            checkDateFormat(start);
-            // check if the end text fits the date format
-            checkDateFormat(end);
-            // return event task
-            return ParsedCommand.event(description, start, end);
+            return parseEvent(command);
         }
-        // if command does not match any task throw error
+
         throw new NUSGPTException("unidentified instruction. the following tasks are valid: todo, event, deadline, find\n");
     }
 

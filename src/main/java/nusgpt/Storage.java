@@ -153,7 +153,7 @@ public class Storage {
                 break;
             // if none of the task types are recognised throw error
             default:
-                throw new IllegalArgumentException("unknown task type: " + type);
+                return null;
         }
         // mark the task as done if it is 1 in the data file
         if (done == 1) {
