@@ -127,33 +127,33 @@ public class Storage {
         Task task;
 
         switch (type) {
-            // create todo task
-            case "T":
-                if (parts.length != 3) {
-                    return null;
-                }
-                task = new ToDo(desc);
-                break;
-            // create deadline task
-            case "D":
-                if (parts.length != 4) {
-                    return null;
-                }
-                String byStored = parts[3].trim();
-                task = new Deadline(desc, byStored);
-                break;
-            // create event task
-            case "E":
-                if (parts.length != 5) {
-                    return null;
-                }
-                String start = parts[3].trim();
-                String end = parts[4].trim();
-                task = new Event(desc, start, end);
-                break;
-            // if none of the task types are recognised throw error
-            default:
+        // create todo task
+        case "T":
+            if (parts.length != 3) {
                 return null;
+            }
+            task = new ToDo(desc);
+            break;
+        // create deadline task
+        case "D":
+            if (parts.length != 4) {
+                return null;
+            }
+            String byStored = parts[3].trim();
+            task = new Deadline(desc, byStored);
+            break;
+        // create event task
+        case "E":
+            if (parts.length != 5) {
+                return null;
+            }
+            String start = parts[3].trim();
+            String end = parts[4].trim();
+            task = new Event(desc, start, end);
+            break;
+        // if none of the task types are recognised throw error
+        default:
+            return null;
         }
         // mark the task as done if it is 1 in the data file
         if (done == 1) {

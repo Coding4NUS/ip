@@ -23,6 +23,13 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Constructs a dialog box with the given text and image.
+     *
+     * @param text Text to display.
+     * @param img  Speaker image.
+     */
+    // generated JavaDoc comment using ChatGPT
     private DialogBox(String text, Image img) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
@@ -47,10 +54,26 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_LEFT);
     }
 
+    /**
+     * Creates a dialog box for the user.
+     *
+     * @param text User text.
+     * @param img  User image.
+     * @return Dialog box instance.
+     */
+    // generated JavaDoc comment using ChatGPT
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Creates a dialog box for NUSGPT (flipped layout).
+     *
+     * @param text NUSGPT text.
+     * @param img  NUSGPT image.
+     * @return Dialog box instance.
+     */
+    // generated JavaDoc comment using ChatGPT
     public static DialogBox getDukeDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

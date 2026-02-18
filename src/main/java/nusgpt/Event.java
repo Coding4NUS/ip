@@ -2,6 +2,11 @@ package nusgpt;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a task that occurs over a time range (start to end).
+ * Each endpoint may be a parsed date/time or free text if parsing fails.
+ */
+// generated JavaDoc comment using ChatGPT
 public class Event extends Task {
     private LocalDateTime startDateTime;
     private boolean startHasTime;
@@ -11,6 +16,14 @@ public class Event extends Task {
     private boolean endHasTime;
     private String endText;
 
+    /**
+     * Creates an event task.
+     *
+     * @param description Event description (non-null).
+     * @param startRaw    Start date/time input.
+     * @param endRaw      End date/time input.
+     */
+    // generated JavaDoc comment using ChatGPT
     public Event(String description, String startRaw, String endRaw) {
         super(description);
         setStart(startRaw);

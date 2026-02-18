@@ -30,8 +30,10 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
-    public void setNUSGPT(NUSGPT d) {
+    /**
+     * Injects the Duke instance.
+     */
+    public void setNusGpt(NUSGPT d) {
         nusgpt = d;
         dialogContainer.getChildren().add(
                 DialogBox.getDukeDialog(nusgpt.getGreeting(), dukeImage)

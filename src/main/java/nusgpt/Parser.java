@@ -1,5 +1,9 @@
 package nusgpt;
 
+/**
+ * Parses raw user input strings into strongly-typed commands.
+ */
+// generated JavaDoc comment using ChatGPT
 public class Parser {
 
     /**
@@ -106,12 +110,12 @@ public class Parser {
      *
      * @param command user input
      * @return ParsedCommand tasks found from keyword
-     * @throws NUSGPTException if keyword is not provided
+     * @throws NusGptException if keyword is not provided
      */
-    private static ParsedCommand parseFind(String command) throws NUSGPTException {
+    private static ParsedCommand parseFind(String command) throws NusGptException {
         final String keyword = command.length() > 4 ? command.substring(4).trim() : "";
         if (keyword.isEmpty()) {
-            throw new NUSGPTException("please provide a keyword to find.\n");
+            throw new NusGptException("please provide a keyword to find.\n");
         }
         return ParsedCommand.find(keyword);
     }
@@ -121,12 +125,12 @@ public class Parser {
      *
      * @param command user input
      * @return ParsedCommand todo command from user input
-     * @throws NUSGPTException if description is not provided
+     * @throws NusGptException if description is not provided
      */
-    private static ParsedCommand parseTodo(String command) throws NUSGPTException {
+    private static ParsedCommand parseTodo(String command) throws NusGptException {
         String description = command.length() >= 5 ? command.substring(5).trim() : "";
         if (description.isEmpty()) {
-            throw new NUSGPTException("please provide a description for the todo task.\n");
+            throw new NusGptException("please provide a description for the todo task.\n");
         }
         return ParsedCommand.todo(description);
     }
@@ -136,22 +140,22 @@ public class Parser {
      *
      * @param command user input
      * @return ParsedCommand deadline command from user input
-     * @throws NUSGPTException if input does not follow deadline format
+     * @throws NusGptException if input does not follow deadline format
      */
-    private static ParsedCommand parseDeadline(String command) throws NUSGPTException {
+    private static ParsedCommand parseDeadline(String command) throws NusGptException {
         int dateIndex = command.indexOf(" /by ");
         if (dateIndex == -1) {
-            throw new NUSGPTException("use the format: deadline (description) /by (date)\n");
+            throw new NusGptException("use the format: deadline (description) /by (date)\n");
         }
 
         String description = command.substring(8, dateIndex).trim();
         String date = command.substring(dateIndex + 5).trim();
 
         if (description.isEmpty()) {
-            throw new NUSGPTException("please provide a description for the deadline task.\n");
+            throw new NusGptException("please provide a description for the deadline task.\n");
         }
         if (date.isEmpty()) {
-            throw new NUSGPTException("please provide a date for the deadline task.\n");
+            throw new NusGptException("please provide a date for the deadline task.\n");
         }
 
         checkDateFormat(date);
@@ -163,15 +167,15 @@ public class Parser {
      *
      * @param command user input
      * @return ParsedCommand event command from user input
-     * @throws NUSGPTException if input does not follow event format
+     * @throws NusGptException if input does not follow event format
      */
-    private static ParsedCommand parseEvent(String command) throws NUSGPTException {
+    private static ParsedCommand parseEvent(String command) throws NusGptException {
         String taskInfo = command.length() >= 6 ? command.substring(6) : "";
         int startIndex = taskInfo.indexOf(" /from ");
         int endIndex = taskInfo.indexOf(" /to ");
 
         if (startIndex == -1 || endIndex == -1 || endIndex < startIndex) {
-            throw new NUSGPTException("use the format: event (description) /from (start) /to (end)\n");
+            throw new NusGptException("use the format: event (description) /from (start) /to (end)\n");
         }
 
         String description = taskInfo.substring(0, startIndex).trim();
@@ -179,13 +183,13 @@ public class Parser {
         String end = taskInfo.substring(endIndex + 5).trim();
 
         if (description.isEmpty()) {
-            throw new NUSGPTException("please provide a description for the event task.\n");
+            throw new NusGptException("please provide a description for the event task.\n");
         }
         if (start.isEmpty()) {
-            throw new NUSGPTException("please provide a time for the start of the event task.\n");
+            throw new NusGptException("please provide a time for the start of the event task.\n");
         }
         if (end.isEmpty()) {
-            throw new NUSGPTException("please provide a time for the end of the event task.\n");
+            throw new NusGptException("please provide a time for the end of the event task.\n");
         }
 
         checkDateFormat(start);
@@ -199,16 +203,16 @@ public class Parser {
      *
      * @param input user input
      * @return ParsedCommand parsed command from user input
-     * @throws NUSGPTException if user input is not a valid command
+     * @throws NusGptException if user input is not a valid command
      */
-    public static ParsedCommand parse(String input) throws NUSGPTException {
+    public static ParsedCommand parse(String input) throws NusGptException {
         if (input == null) {
-            throw new NUSGPTException("command cannot be null\n");
+            throw new NusGptException("command cannot be null\n");
         }
 
         String command = input.trim();
         if (command.isEmpty()) {
-            throw new NUSGPTException("command cannot be empty\n");
+            throw new NusGptException("command cannot be empty\n");
         }
 
         if (command.equals("bye")) {
@@ -242,7 +246,7 @@ public class Parser {
             return parseEvent(command);
         }
 
-        throw new NUSGPTException("unidentified instruction. the following tasks are valid: todo, event, deadline, find\n");
+        throw new NusGptException("Invalid command. Type 'help' for list of valid commands\n");
     }
 
     /**
@@ -252,9 +256,9 @@ public class Parser {
      * @param keyword command keyword in input
      * @param prefixLength length of command
      * @return int index
-     * @throws NUSGPTException if index is not the correct format
+     * @throws NusGptException if index is not the correct format
      */
-    private static int parseIndex(String command, String keyword, int prefixLength) throws NUSGPTException {
+    private static int parseIndex(String command, String keyword, int prefixLength) throws NusGptException {
         assert prefixLength >= 0 : "prefixLength must be non-negative";
         // get index text from command
         String index;
@@ -265,14 +269,14 @@ public class Parser {
         }
         // if index text is empty throw error
         if (index.isEmpty()) {
-            throw new NUSGPTException("please provide an index for " + keyword + ".\n");
+            throw new NusGptException("please provide an index for " + keyword + ".\n");
         }
         try {
             // parse the index
             return Integer.parseInt(index);
         // if index text is the wrong format empty throw error
         } catch (NumberFormatException e) {
-            throw new NUSGPTException("invalid index provided for " + keyword + ".\n");
+            throw new NusGptException("invalid index provided for " + keyword + ".\n");
         }
     }
 
@@ -280,14 +284,14 @@ public class Parser {
      * Checks if the date text matches the valid formats
      *
      * @param raw date text
-     * @throws NUSGPTException if parsing fails
+     * @throws NusGptException if parsing fails
      */
-    private static void checkDateFormat(String raw) throws NUSGPTException {
+    private static void checkDateFormat(String raw) throws NusGptException {
         if (DateTime.matchDateFormat(raw)) {
             try {
                 DateTime.parseUserInput(raw);
             } catch (IllegalArgumentException ex) {
-                throw new NUSGPTException(ex.getMessage() + "\n");
+                throw new NusGptException(ex.getMessage() + "\n");
             }
         }
     }

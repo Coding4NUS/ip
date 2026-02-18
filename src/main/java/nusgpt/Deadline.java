@@ -2,11 +2,23 @@ package nusgpt;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a task with a deadline ("by" date/time).
+ * The deadline may be stored as a parsed date/time or as free text if parsing fails.
+ */
+// generated JavaDoc comment using ChatGPT
 public class Deadline extends Task {
     private LocalDateTime taskDateTime;
     private boolean hasTime;
     private String text;
 
+    /**
+     * Creates a deadline task.
+     *
+     * @param description Task description (non-null).
+     * @param date        Deadline text; if parseable it is stored as a date/time, otherwise as free text.
+     */
+    // generated JavaDoc comment using ChatGPT
     public Deadline(String description, String date) {
         super(description);
         checkDate(date);
@@ -78,6 +90,12 @@ public class Deadline extends Task {
         return "[D]" + super.toString() + " (by: " + getTime() + ")";
     }
 
+    /**
+     * Returns the storage string representation of this task.
+     *
+     * @return Storage line for this task.
+     */
+    // generated JavaDoc comment using ChatGPT
     @Override
     public String toFileString() {
         // store date in storage format

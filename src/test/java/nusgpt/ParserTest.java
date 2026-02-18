@@ -8,9 +8,9 @@ public class ParserTest {
 
     @Test
     void parse_nullEmptyUnknownCommand() {
-        assertThrows(NUSGPTException.class, () -> Parser.parse(null));
-        assertThrows(NUSGPTException.class, () -> Parser.parse(""));
-        assertThrows(NUSGPTException.class, () -> Parser.parse("unknown command"));
+        assertThrows(NusGptException.class, () -> Parser.parse(null));
+        assertThrows(NusGptException.class, () -> Parser.parse(""));
+        assertThrows(NusGptException.class, () -> Parser.parse("unknown command"));
     }
 
     @Test
@@ -37,22 +37,22 @@ public class ParserTest {
         assertEquals(3, delete.index);
 
         // missing mark index
-        assertThrows(NUSGPTException.class, () -> Parser.parse("mark"));
+        assertThrows(NusGptException.class, () -> Parser.parse("mark"));
 
         // incorrect mark index
-        assertThrows(NUSGPTException.class, () -> Parser.parse("mark abc"));
+        assertThrows(NusGptException.class, () -> Parser.parse("mark abc"));
 
         // missing unmark index
-        assertThrows(NUSGPTException.class, () -> Parser.parse("unmark"));
+        assertThrows(NusGptException.class, () -> Parser.parse("unmark"));
 
         // incorrect unmark index
-        assertThrows(NUSGPTException.class, () -> Parser.parse("unmark abc"));
+        assertThrows(NusGptException.class, () -> Parser.parse("unmark abc"));
 
         // missing delete index
-        assertThrows(NUSGPTException.class, () -> Parser.parse("delete"));
+        assertThrows(NusGptException.class, () -> Parser.parse("delete"));
 
         // incorrect unmark index
-        assertThrows(NUSGPTException.class, () -> Parser.parse("delete abc"));
+        assertThrows(NusGptException.class, () -> Parser.parse("delete abc"));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class ParserTest {
         assertEquals("read book", todo.description);
 
         // missing description
-        assertThrows(NUSGPTException.class, () -> Parser.parse("todo"));
+        assertThrows(NusGptException.class, () -> Parser.parse("todo"));
     }
 
     @Test
@@ -78,16 +78,16 @@ public class ParserTest {
         assertEquals("2019-12-02", dl2.date);
 
         // missing description
-        assertThrows(NUSGPTException.class, () -> Parser.parse("deadline /by 2/12/2019 1800"));
+        assertThrows(NusGptException.class, () -> Parser.parse("deadline /by 2/12/2019 1800"));
 
         // missing /by
-        assertThrows(NUSGPTException.class, () -> Parser.parse("deadline return book 2/12/2019 1800"));
+        assertThrows(NusGptException.class, () -> Parser.parse("deadline return book 2/12/2019 1800"));
 
         // missing date
-        assertThrows(NUSGPTException.class, () -> Parser.parse("deadline return book /by"));
+        assertThrows(NusGptException.class, () -> Parser.parse("deadline return book /by"));
 
         // invalid date
-        assertThrows(NUSGPTException.class, () -> Parser.parse("deadline return book /by 50/30/2019"));
+        assertThrows(NusGptException.class, () -> Parser.parse("deadline return book /by 50/30/2019"));
     }
 
     @Test
@@ -99,27 +99,27 @@ public class ParserTest {
         assertEquals("2025-01-01 1600", ev.end);
 
         // missing description
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event /from 2025-01-01 1400 /to 2025-01-01 1600"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event /from 2025-01-01 1400 /to 2025-01-01 1600"));
 
         // missing /from
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event project meeting /to 2025-01-01 1600"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event project meeting /to 2025-01-01 1600"));
 
         // missing start date
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event project meeting /from /to 2025-01-01 1600"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event project meeting /from /to 2025-01-01 1600"));
 
         // missing /to
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event project meeting /from 2025-01-01 1400"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event project meeting /from 2025-01-01 1400"));
 
         // missing end date
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event project meeting /from 2025-01-01 1400 /to"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event project meeting /from 2025-01-01 1400 /to"));
 
         // /to before /from (endIndex < startIndex)
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event project meeting /to 2025-01-01 1600 /from 2025-01-01 1400"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event project meeting /to 2025-01-01 1600 /from 2025-01-01 1400"));
 
         // invalid date
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event project meeting /from 50/30/2019 1400 /to 50/30/2019 1600"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event project meeting /from 50/30/2019 1400 /to 50/30/2019 1600"));
 
         // invalid time
-        assertThrows(NUSGPTException.class, () -> Parser.parse("event project meeting /from 50/30/2019 2500 /to 50/30/2019 3000"));
+        assertThrows(NusGptException.class, () -> Parser.parse("event project meeting /from 50/30/2019 2500 /to 50/30/2019 3000"));
     }
 }

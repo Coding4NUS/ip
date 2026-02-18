@@ -3,6 +3,10 @@ package nusgpt;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents an in-memory list of tasks and related operations.
+ */
+// generated JavaDoc comment using ChatGPT
 public class TaskList {
     // list of tasks
     private final ArrayList<Task> tasks;
@@ -12,35 +16,67 @@ public class TaskList {
         this.tasks = new ArrayList<>();
     }
 
-    // constructor for given task list copies it to new task list
+    /**
+     * Creates a task list initialized from an existing list.
+     *
+     * @param initial Initial tasks (non-null).
+     */
+    // generated JavaDoc comment using ChatGPT
     public TaskList(List<Task> initial) {
         assert initial != null : "initial task list must not be null";
         this.tasks = new ArrayList<>(initial);
     }
 
-    // return number of tasks in list
+    /**
+     * Returns number of tasks.
+     *
+     * @return Size of list.
+     */
+    // generated JavaDoc comment using ChatGPT
     public int size() {
         return tasks.size();
     }
 
-    // returns the task from the index in task list
+    /**
+     * Returns the task at the given zero-based index.
+     *
+     * @param index Zero-based index.
+     * @return Task at index.
+     */
+    // generated JavaDoc comment using ChatGPT
     public Task get(int index) {
         assert index >= 0 && index < tasks.size() : "index must be within [0, size)";
         return tasks.get(index);
     }
 
-    // adds task to task list
+    /**
+     * Adds a task to the list.
+     *
+     * @param task Task to add.
+     */
+    // generated JavaDoc comment using ChatGPT
     public void add(Task task) {
         tasks.add(task);
     }
 
-    // removes the task from the index in task list
+    /**
+     * Removes and returns the task at the given zero-based index.
+     *
+     * @param indexZeroBased Zero-based index.
+     * @return Removed task.
+     */
+    // generated JavaDoc comment using ChatGPT
     public Task remove(int indexZeroBased) {
         assert indexZeroBased >= 0 && indexZeroBased < tasks.size() : "index must be within [0, size)";
         return tasks.remove(indexZeroBased);
     }
 
-    // return the task array list for saving
+    /**
+     * Returns the underlying list for storage saving.
+     *
+     * @return Backing ArrayList.
+     */
+    // generated JavaDoc comment using ChatGPT
     public ArrayList<Task> taskArrayList() {
         return tasks;
     }
