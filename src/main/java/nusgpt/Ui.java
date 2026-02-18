@@ -31,6 +31,26 @@ public class Ui {
         return message;
     }
 
+    public String formatHelp() {
+        return ""
+                + "Available commands:\n"
+                + "1) help\n"
+                + "2) list\n"
+                + "3) todo (description)\n"
+                + "4) deadline (description) /by (date)\n"
+                + "5) event (description) /from (start date) /to (end date)\n"
+                + "   date formats:\n"
+                + "     - yyyy-MM-dd\n"
+                + "     - yyyy-MM-dd HHmm\n"
+                + "     - d/M/yyyy\n"
+                + "     - d/M/yyyy HHmm\n"
+                + "6) mark (task index)\n"
+                + "7) unmark (task index)\n"
+                + "8) delete (task index)\n"
+                + "9) find (keyword)\n"
+                + "10) bye\n";
+    }
+
     public String formatList(TaskList tasks) {
         assert tasks != null : "tasks must not be null";
         StringBuilder sb = new StringBuilder();
@@ -102,6 +122,10 @@ public class Ui {
     // template for errors
     public void showError(String message) {
         System.out.println(message);
+    }
+
+    public void showHelp() {
+        System.out.print(formatHelp());
     }
 
     // template for showing list of tasks

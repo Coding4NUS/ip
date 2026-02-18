@@ -78,6 +78,9 @@ public class NUSGPT {
                 case FIND:
                     ui.showFindResults(tasks.findByKeyword(cmd.description));
                     break;
+                case HELP:
+                    ui.showHelp();
+                    break;
                 case MARK: {
                     Task t = getTaskByIndex(cmd.index);
                     t.markDone();
@@ -140,6 +143,9 @@ public class NUSGPT {
 
                 case FIND:
                     return ui.formatFindResults(tasks.findByKeyword(cmd.description));
+
+                case HELP:
+                    return ui.formatHelp();
 
                 case MARK: {
                     Task t = getTaskByIndex(cmd.index);
