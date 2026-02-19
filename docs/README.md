@@ -21,9 +21,9 @@ NUSGPT is the ultimate task handler!
 - help to show valid commands
 
 ## ToDo Task
-Add a ToDo task to your task list.
+Add a ToDo task to your task list. 
 
-Format: 'todo (description)'
+Format: `todo (description)`
 
 Example input:
 ```
@@ -38,7 +38,7 @@ Example output:
 ## Deadline Task
 Add a Deadline task to your task list.
 
-Format: 'deadline (description) /by (date)'
+Format: `deadline (description) /by (date)`
 
 Example input:
 ```
@@ -53,7 +53,7 @@ Example output:
 ## Event Task
 Add an Event task to your task list.
 
-Format: 'event (description) /from (start date) /to (end date)'
+Format: `event (description) /from (start date) /to (end date)`
 
 Example input:
 ```
@@ -77,9 +77,9 @@ Valid date formats:
 ## Mark/Unmark Task
 Marks/Unmarks a task from your task list.
 
-Mark Format: 'mark (task index)'
+Mark Format: `mark (task index)`
 
-Unmark Format: 'unmark (task index)'
+Unmark Format: `unmark (task index)`
 
 Mark Example (ToDo task with index 1):
 
@@ -106,24 +106,24 @@ Output:
 ## Delete Task
 Deletes a task from your task list.
 
-Format: 'delete (task index)'
+Format: `delete (task index)`
 
 ## List Tasks
 Shows a list of all tasks in your task list.
 
-Format: 'list'
+Format: `list`
 
 ## Find Tasks
 Shows a list of all the tasks with the keyword in your task list.
 
-Format: 'find (keyword)
+Format: `find (keyword)`
 
 ## Help
 Shows a list of all the valid commands and their formats.
 
-Format: 'help'
+Format: `help`
 
 ## Bye
 Stops the application.
 
-Format: 'bye'
+Format: `bye`
