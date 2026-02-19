@@ -69,10 +69,10 @@ Example output:
 Dates for tasks can be stored as either text or the LocalDateTime format.
 
 Valid date formats:
-- yyyy/MM/dd
-- yyyy/MM/dd HHmm
-- dd/M/yyyy
-- dd/M/yyyy HHmm
+- dd/MM/yyyy
+- dd/MM/yyyy HHmm
+- yyyy-MM-dd
+- yyyy-MM-dd HHmm
 
 ## Mark/Unmark Task
 Marks/Unmarks a task from your task list.

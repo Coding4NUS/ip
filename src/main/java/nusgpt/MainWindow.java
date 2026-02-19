@@ -6,6 +6,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 /**
  * Controller for the main GUI.
@@ -55,6 +57,10 @@ public class MainWindow extends AnchorPane {
         if (nusgpt.isExitCommand(input)) {
             userInput.setDisable(true);
             sendButton.setDisable(true);
+            Stage stage = (Stage) sendButton.getScene().getWindow();
+            stage.close();
+            Platform.exit();
+            return;
         }
     }
 }
