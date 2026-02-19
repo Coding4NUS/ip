@@ -171,16 +171,20 @@ public class Parser {
      */
     private static ParsedCommand parseEvent(String command) throws NusGptException {
         String taskInfo = command.length() >= 6 ? command.substring(6) : "";
-        int startIndex = taskInfo.indexOf(" /from ");
-        int endIndex = taskInfo.indexOf(" /to ");
 
-        if (startIndex == -1 || endIndex == -1 || endIndex < startIndex) {
+        int startIndex = taskInfo.indexOf(" /from ");
+        if (startIndex == -1) {
+            throw new NusGptException("use the format: event (description) /from (start) /to (end)\n");
+        }
+
+        int endIndex = taskInfo.indexOf(" /to ", startIndex + " /from ".length());
+        if (endIndex == -1) {
             throw new NusGptException("use the format: event (description) /from (start) /to (end)\n");
         }
 
         String description = taskInfo.substring(0, startIndex).trim();
-        String start = taskInfo.substring(startIndex + 7, endIndex).trim();
-        String end = taskInfo.substring(endIndex + 5).trim();
+        String start = taskInfo.substring(startIndex + " /from ".length(), endIndex).trim();
+        String end = taskInfo.substring(endIndex + " /to ".length()).trim();
 
         if (description.isEmpty()) {
             throw new NusGptException("please provide a description for the event task.\n");
